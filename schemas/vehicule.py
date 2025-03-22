@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional, List
 
 from model import Vehicule
 
@@ -20,3 +21,24 @@ def get_vehicule(vehicule: Vehicule):
         "latitude": vehicule.latitude,
         "longitude": vehicule.longitude    
     }
+
+class VehiculeListSchema(BaseModel):
+    """ Defines how a list of vehicules should be represented
+    """
+    produtos:List[VehiculeSchema]
+
+
+def get_vehicules(vehicules: List[Vehicule]):
+    """ Return a list of vehicules in the format of
+        VehiculeListSchema.
+    """
+    result = []
+    for vehicule in vehicules:
+        result.append({
+            "id": vehicule.id,	
+            "name": vehicule.name,
+            "latitude": vehicule.latitude,
+            "longitude": vehicule.longitude            
+        })
+
+    return {"vehicules": result}

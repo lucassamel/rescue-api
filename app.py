@@ -6,6 +6,7 @@ from sqlalchemy.exc import IntegrityError
 from model import Session, Vehicule, RescuePoint
 from logger import logger
 from schemas.vehicule import *
+from schemas.rescue_point import *
 from schemas.error import ErrorSchema
 
 info = Info(title="SOS Recue API", version="1.0.0")
@@ -14,6 +15,7 @@ app = OpenAPI(__name__, info=info)
 # defining tags
 home_tag = Tag(name="Documentation", description="Documentation selection screen")
 vehicule_tag = Tag(name="Vehicule", description="Create, list and remove vehicules from the database")
+rescue_point_tag = Tag(name="Rescue Point", description="Create, list and remove rescue points from the database")
 
 
 @app.get('/', tags=[home_tag])
@@ -47,7 +49,7 @@ def add_vehicule(form: VehiculeSchema):
 
     except IntegrityError as e:
         # error raised from the IntegrityError
-        error_msg = "Produto de mesmo nome já salvo na base :/"
+        error_msg = "Error while adding a new vehicule"
         logger.warning(f"Error while adding a new vehicule: '{vehicule.name}', {error_msg}")
         return {"mesage": error_msg}, 409
 
@@ -55,4 +57,60 @@ def add_vehicule(form: VehiculeSchema):
         # other errors
         error_msg = "Error while adding a new vehicule"
         logger.warning(f"Error while adding a new vehicule: '{vehicule.name}', {e}")
+        return {"message": error_msg + " " + str(e)}, 400
+
+@app.get('/vehicule', tags=[vehicule_tag],
+         responses={"200": VehiculeListSchema, "404": ErrorSchema})
+def get_all_vehicules():
+    """Faz a busca por todos os Produto cadastrados
+
+    Retorna uma representação da listagem de produtos.
+    """
+    logger.debug(f"Listing all vehicules")
+    # open data base session
+    session = Session()
+    # get all vehicules
+    vehicules = session.query(Vehicule).all()
+
+    if not vehicules:
+        # if there are no vehicules
+        return {"vehicules": []}, 200
+    else:
+        logger.debug(f"%d vehicules funded" % len(vehicules))
+        # return a representation of the list of vehicules
+        print(vehicules)
+        return get_vehicules(vehicules), 200  
+
+@app.post('/rescue-point', tags=[rescue_point_tag],
+          responses={"200": RescuePointSchema, "409": ErrorSchema, "400": ErrorSchema})
+def add_recue_point(form: RescuePointSchema):
+    """Add a new rescue point to the database.
+
+    Return the new rescue point added to the database.
+    """
+    rescue_point = RescuePoint(
+        name=form.name,
+        latitude=form.latitude,
+        longitude=form.longitude)
+    logger.debug(f"Creating a recue point: '{rescue_point.name}'")
+    try: 
+        # open data base session
+        session = Session()
+        # adding new rescue point
+        session.add(rescue_point)
+        # commit the transaction
+        session.commit()
+        logger.debug(f"Adding a rescue point: '{rescue_point.name}'")
+        return get_rescue_point(rescue_point), 200
+
+    except IntegrityError as e:
+        # error raised from the IntegrityError
+        error_msg = "Error while adding a new rescue point"
+        logger.warning(f"Error while adding a new rescue point: '{rescue_point.name}', {error_msg}")
+        return {"mesage": error_msg}, 409
+
+    except Exception as e:
+        # other errors
+        error_msg = "Error while adding a new rescue point"
+        logger.warning(f"Error while adding a new rescue point: '{rescue_point.name}', {e}")
         return {"message": error_msg + " " + str(e)}, 400
