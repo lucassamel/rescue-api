@@ -25,7 +25,7 @@ def get_vehicule(vehicule: Vehicule):
 class VehiculeListSchema(BaseModel):
     """ Defines how a list of vehicules should be represented
     """
-    produtos:List[VehiculeSchema]
+    vehicules:List[VehiculeSchema]
 
 
 def get_vehicules(vehicules: List[Vehicule]):
