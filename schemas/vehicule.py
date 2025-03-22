@@ -42,3 +42,8 @@ def get_vehicules(vehicules: List[Vehicule]):
         })
 
     return {"vehicules": result}
+
+class VehiculeDeleteSchema(BaseModel):
+    """ Defines how a vehicule to be deleted should be represented
+    """
+    id: str = "1"

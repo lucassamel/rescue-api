@@ -1,5 +1,6 @@
 from flask import redirect
 from flask_openapi3 import OpenAPI, Info, Tag
+from urllib.parse import unquote
 
 from sqlalchemy.exc import IntegrityError
 
@@ -42,7 +43,7 @@ def add_vehicule(form: VehiculeSchema):
         session = Session()
         # adding new vehicule
         session.add(vehicule)
-        # commit the transaction
+        # commit the changes
         session.commit()
         logger.debug(f"Adding a vehicule: '{vehicule.name}'")
         return get_vehicule(vehicule), 200
@@ -51,7 +52,7 @@ def add_vehicule(form: VehiculeSchema):
         # error raised from the IntegrityError
         error_msg = "Error while adding a new vehicule"
         logger.warning(f"Error while adding a new vehicule: '{vehicule.name}', {error_msg}")
-        return {"mesage": error_msg}, 409
+        return {"message": error_msg}, 409
 
     except Exception as e:
         # other errors
@@ -62,15 +63,15 @@ def add_vehicule(form: VehiculeSchema):
 @app.get('/vehicule', tags=[vehicule_tag],
          responses={"200": VehiculeListSchema, "404": ErrorSchema})
 def get_all_vehicules():
-    """Faz a busca por todos os Produto cadastrados
+    """Search for all vehicules in the database.
 
-    Retorna uma representação da listagem de produtos.
+    Return a list of all vehicules.
     """
     logger.debug(f"Listing all vehicules")
     # open data base session
     session = Session()
-    # get all vehicules
-    vehicules = session.query(Vehicule).all()
+    # get all active vehicules
+    vehicules = session.query(Vehicule).filter(Vehicule.status == True).all()
 
     if not vehicules:
         # if there are no vehicules
@@ -81,6 +82,34 @@ def get_all_vehicules():
         print(vehicules)
         return get_vehicules(vehicules), 200  
 
+@app.delete('/vehicule', tags=[vehicule_tag],
+            responses={"200": VehiculeSchema, "404": ErrorSchema})
+def del_produto(query: VehiculeDeleteSchema):
+    """Delete a Vehicule from the database based on the id
+
+    Return the deleted vehicule.
+    """
+    vehicule_id = unquote(unquote(query.id))
+    print(vehicule_id)
+    logger.debug(f"Deleting the vehicule based on this id #{vehicule_id}")
+    # open data base session
+    session = Session()
+    # query to delete the vehicule
+    vehicule_to_update = session.query(Vehicule).filter(Vehicule.id == int(vehicule_id)).first()
+
+    if vehicule_to_update:
+        # update the object status
+        vehicule_to_update.status = False
+        # commit the changes
+        session.commit()
+        logger.debug(f"Vehicule status updated #{vehicule_to_update}")
+        return {"message": "Vehicule deleted", "id": get_vehicule(vehicule_to_update)}, 200
+    else:
+        # if vehicule not found
+        error_msg = "Vehicule not found"
+        logger.warning(f"Error while delete the vehicule #{error_msg}")
+        return {"message": error_msg}, 404
+    
 @app.post('/rescue-point', tags=[rescue_point_tag],
           responses={"200": RescuePointSchema, "409": ErrorSchema, "400": ErrorSchema})
 def add_recue_point(form: RescuePointSchema):
@@ -98,7 +127,7 @@ def add_recue_point(form: RescuePointSchema):
         session = Session()
         # adding new rescue point
         session.add(rescue_point)
-        # commit the transaction
+        # commit the changes
         session.commit()
         logger.debug(f"Adding a rescue point: '{rescue_point.name}'")
         return get_rescue_point(rescue_point), 200
@@ -107,7 +136,7 @@ def add_recue_point(form: RescuePointSchema):
         # error raised from the IntegrityError
         error_msg = "Error while adding a new rescue point"
         logger.warning(f"Error while adding a new rescue point: '{rescue_point.name}', {error_msg}")
-        return {"mesage": error_msg}, 409
+        return {"message": error_msg}, 409
 
     except Exception as e:
         # other errors
