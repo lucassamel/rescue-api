@@ -45,3 +45,8 @@ class RescuePointDeleteSchema(BaseModel):
     """ Defines how a rescue point to be deleted should be represented
     """
     id: str = "1"
+
+class GenerateRescuePointSchema(BaseModel):
+    """ Defines how a rescue point to be deleted should be represented
+    """
+    number: int = 50

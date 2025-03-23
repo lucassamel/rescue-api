@@ -5,6 +5,7 @@ from urllib.parse import unquote
 from sqlalchemy.exc import IntegrityError
 
 from model import Session, Vehicule, RescuePoint
+from model.rescue_point import *
 from logger import logger
 from schemas.vehicule import *
 from schemas.rescue_point import *
@@ -18,13 +19,11 @@ home_tag = Tag(name="Documentation", description="Documentation selection screen
 vehicule_tag = Tag(name="Vehicule", description="Create, list and remove vehicules from the database")
 rescue_point_tag = Tag(name="Rescue Point", description="Create, list and remove rescue points from the database")
 
-
 @app.get('/', tags=[home_tag])
 def home():
     """Redirect to /openapi, documentation screen.
     """
     return redirect('/openapi')
-
 
 @app.post('/vehicule', tags=[vehicule_tag],
           responses={"200": VehiculeSchema, "409": ErrorSchema, "400": ErrorSchema})
@@ -142,6 +141,37 @@ def add_recue_point(form: RescuePointSchema):
         # other errors
         error_msg = "Error while adding a new rescue point"
         logger.warning(f"Error while adding a new rescue point: '{rescue_point.name}', {e}")
+        return {"message": error_msg + " " + str(e)}, 400
+
+@app.post('/generate-rescue-point', tags=[rescue_point_tag],
+          responses={"200": RescuePointListSchema, "409": ErrorSchema, "400": ErrorSchema})
+def generate_random_rescue_points(form: GenerateRescuePointSchema):
+    """Generate a several rescue points to the database.
+
+    Return a list of new rescue points added to the database.
+    """
+    rescue_points = generate_rescue_points(int(form.number))
+    logger.debug(f"Rescue points generated: '{rescue_points}'")
+    try: 
+        # open data base session
+        session = Session()
+        # adding new rescue point            
+        session.add_all(rescue_points)
+        logger.debug(f"Adding a rescue point: '{rescue_points}'")
+        # commit the changes
+        session.commit()        
+        return get_rescue_points(rescue_points), 200
+
+    except IntegrityError as e:
+        # error raised from the IntegrityError
+        error_msg = "Error while adding a new rescue point"
+        logger.warning(f"Error while adding a new rescue point: '{rescue_points}', {error_msg}")
+        return {"message": error_msg}, 409
+
+    except Exception as e:
+        # other errors
+        error_msg = "Error while adding a new rescue point"
+        logger.warning(f"Error while adding a new rescue point: '{rescue_points}', {e}")
         return {"message": error_msg + " " + str(e)}, 400
     
 @app.get('/rescue-point', tags=[rescue_point_tag],

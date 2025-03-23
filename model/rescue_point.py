@@ -1,6 +1,7 @@
 from sqlalchemy import Column, String, Integer, DateTime, ForeignKey, Boolean
 from datetime import datetime
 from typing import Union
+import random
 
 from  model import Base
 
@@ -37,3 +38,22 @@ class RescuePoint(Base):
         self.status = status        
         if inserted_date:
             self.inseted_date = inserted_date
+
+def generate_rescue_points(quantity:int, min_val:int=-100, max_val:int=100):
+    """
+        Generate a several rescue points.
+
+        Arguments:
+            quantity: the quantity of rescue points that will be generated.                       
+        """
+    rescue_points = [(random.randint(min_val, max_val), random.randint(min_val, max_val)) for _ in range(quantity)]
+
+    result = []
+    for index, rescue_point in enumerate(rescue_points):                   
+        result.append(RescuePoint(           	
+            name= f"Rescue Point {index + 1}",
+            latitude= rescue_point[0],
+            longitude= rescue_point[1]            
+        ))
+
+    return result
