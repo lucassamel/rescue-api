@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 import os
 
-# importando os elementos definidos no modelo
+# import all models
 from model.base import Base
 from model.vehicule import Vehicule
 from model.rescue_point import RescuePoint
@@ -29,4 +29,3 @@ if not database_exists(engine.url):
 
 # create all tables in the engine if they don't exist
 Base.metadata.create_all(engine)
-

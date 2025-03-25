@@ -57,3 +57,18 @@ def generate_rescue_points(quantity:int, min_val:int=-100, max_val:int=100):
         ))
 
     return result
+
+def calculate_distance(point1, point2):
+    return ((point1[0] - point2[0])**2 + (point1[1] - point2[1])**2)**0.5
+
+def closest_point(reference_point, points):
+    next_point = points[0]
+    shortest_distance = calculate_distance(reference_point, next_point)
+
+    for point in points[1:]:
+        distance = calculate_distance(reference_point, point)
+        if distance < shortest_distance:
+            shortest_distance = distance
+            next_point = point
+
+    return next_point
