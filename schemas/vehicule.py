@@ -1,10 +1,12 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional, List
 
 from model import Vehicule
 
-
 class VehiculeSchema(BaseModel):
+    
+    # model_config = ConfigDict(coerce_numbers_to_str=True)
+
     """ Defines how a new vehicule to be inserted should be represented
     """    
     name: str = "Car XPTO"

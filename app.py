@@ -10,9 +10,11 @@ from logger import logger
 from schemas.vehicule import *
 from schemas.rescue_point import *
 from schemas.error import ErrorSchema
+from flask_cors import CORS
 
 info = Info(title="SOS Recue API", version="1.0.0")
 app = OpenAPI(__name__, info=info)
+CORS(app)
 
 # defining tags
 home_tag = Tag(name="Documentation", description="Documentation selection screen")
