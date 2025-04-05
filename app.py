@@ -200,7 +200,7 @@ def get_all_rescue_points():
     
 @app.delete('/rescue-point', tags=[rescue_point_tag],
             responses={"200": RescuePointSchema, "404": ErrorSchema})
-def del_rescue_point(query: RescuePointDeleteSchema):
+def del_rescue_point(query: RescuePointByIdSchema):
     """Delete a Rescue Point from the database based on the id
 
     Return the deleted rescue point.
@@ -224,4 +224,36 @@ def del_rescue_point(query: RescuePointDeleteSchema):
         # if rescue point not found
         error_msg = "Rescue point not found"
         logger.warning(f"Error while delete the rescue point #{error_msg}")
+        return {"message": error_msg}, 404
+    
+@app.get('/perform-rescue', tags=[rescue_point_tag],
+            responses={"200": RescuePointSchema, "404": ErrorSchema})
+def perform_recue_point(query: RescuePointByIdSchema):
+    """Search for the closest rescue point to the vehicule.
+
+    Return the closest rescue point.
+    """
+    vehicule_id = unquote(unquote(query.id))
+    print(vehicule_id)
+    logger.debug(f"Searching the closest rescue point based in the vehicule id #{vehicule_id}")
+    # open data base session
+    session = Session()
+    # query to delete the vehicule
+    vehicule = session.query(Vehicule).filter(Vehicule.id == int(vehicule_id)).first()
+    rescue_points = session.query(RescuePoint).all()
+
+    closest_rescue_point = closest_point(vehicule, rescue_points)
+
+    if closest_rescue_point:
+        # update the object status
+        closest_rescue_point.status = False
+        closest_rescue_point.vehicule = vehicule.id
+        # commit the changes
+        session.commit()
+        logger.debug(f"Closest rescue points #{closest_rescue_point}")
+        return {"message": "Closest rescue point", "rescue_point": get_rescue_point(closest_rescue_point)}, 200
+    else:
+        # if rescue point not found
+        error_msg = "Rescue point not found"
+        logger.warning(f"Error while searching for the closest rescue point #{error_msg}")
         return {"message": error_msg}, 404

@@ -41,7 +41,7 @@ def get_rescue_points(rescue_points: List[RescuePoint]):
 
     return {"rescue_points": result}
 
-class RescuePointDeleteSchema(BaseModel):
+class RescuePointByIdSchema(BaseModel):
     """ Defines how a rescue point to be deleted should be represented
     """
     id: str = "1"

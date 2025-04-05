@@ -1,6 +1,8 @@
 from sqlalchemy import Column, String, Integer, DateTime, ForeignKey, Boolean
 from datetime import datetime
-from typing import Union
+from typing import Union, List
+from model import Vehicule
+
 import random
 
 from  model import Base
@@ -11,7 +13,7 @@ class RescuePoint(Base):
 
     id = Column("pk_rescue_point",Integer, primary_key=True)
     name = Column(String(80))
-    longitude = Column(String(400))
+    longitude = Column(Integer)
     latitude = Column(Integer)
     inserted_date = Column(DateTime, default=datetime.now())
     status =Column(Boolean, default=True)
@@ -58,10 +60,13 @@ def generate_rescue_points(quantity:int, min_val:int=-100, max_val:int=100):
 
     return result
 
-def calculate_distance(point1, point2):
-    return ((point1[0] - point2[0])**2 + (point1[1] - point2[1])**2)**0.5
+# This function is used to calculate the distance between two points.
+# It uses the Euclidean distance formula.
+def calculate_distance(point1: Vehicule, point2: RescuePoint):
+    return ((point1.latitude - point2.latitude)**2 + (point1.longitude - point2.longitude)**2)**0.5
 
-def closest_point(reference_point, points):
+@staticmethod
+def closest_point(reference_point: Vehicule, points: List[RescuePoint]):
     next_point = points[0]
     shortest_distance = calculate_distance(reference_point, next_point)
 
