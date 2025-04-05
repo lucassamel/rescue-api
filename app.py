@@ -248,6 +248,9 @@ def perform_recue_point(query: RescuePointByIdSchema):
         # update the object status
         closest_rescue_point.status = False
         closest_rescue_point.vehicule = vehicule.id
+        # update the vehicule with the rescue point
+        vehicule.longitude = closest_rescue_point.longitude
+        vehicule.latitude = closest_rescue_point.latitude
         # commit the changes
         session.commit()
         logger.debug(f"Closest rescue points #{closest_rescue_point}")
