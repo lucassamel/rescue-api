@@ -240,7 +240,7 @@ def perform_recue_point(query: RescuePointByIdSchema):
     session = Session()
     # query to delete the vehicule
     vehicule = session.query(Vehicule).filter(Vehicule.id == int(vehicule_id)).first()
-    rescue_points = session.query(RescuePoint).all()
+    rescue_points = session.query(RescuePoint).filter(RescuePoint.status == True).all()
 
     closest_rescue_point = closest_point(vehicule, rescue_points)
 
