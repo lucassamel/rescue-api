@@ -23,7 +23,7 @@ def get_rescue_point(rescue_point: RescuePoint):
 class RescuePointListSchema(BaseModel):
     """ Defines how a list of rescue points should be represented
     """
-    produtos:List[RescuePointSchema]
+    rescue_points:List[RescuePointSchema]
 
 
 def get_rescue_points(rescue_points: List[RescuePoint]):
