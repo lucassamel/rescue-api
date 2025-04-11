@@ -1,1 +1,13 @@
-[2025-04-05 16:27:21,587] INFO _log() L97   127.0.0.1 - - [05/Apr/2025 16:27:21] "GET /perform-rescue?id=1 HTTP/1.1" 200 - - call_trace=d:\Desenvolvimento\PUC\rescue-api\.venv\Lib\site-packages\werkzeug\_internal.py L97  
+[2025-04-10 20:56:36,223] INFO _log() L97   [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000 - call_trace=d:\Desenvolvimento\PUC\rescue-api\.venv\Lib\site-packages\werkzeug\_internal.py L97  
+[2025-04-10 20:56:36,226] INFO _log() L97   [33mPress CTRL+C to quit[0m - call_trace=d:\Desenvolvimento\PUC\rescue-api\.venv\Lib\site-packages\werkzeug\_internal.py L97  
+[2025-04-10 20:56:36,230] INFO _log() L97    * Restarting with stat - call_trace=d:\Desenvolvimento\PUC\rescue-api\.venv\Lib\site-packages\werkzeug\_internal.py L97  
+[2025-04-10 20:56:38,751] INFO _log() L97   127.0.0.1 - - [10/Apr/2025 20:56:38] "GET /openapi/swagger HTTP/1.1" 200 - - call_trace=d:\Desenvolvimento\PUC\rescue-api\.venv\Lib\site-packages\werkzeug\_internal.py L97  
+[2025-04-10 20:56:39,050] INFO _log() L97   127.0.0.1 - - [10/Apr/2025 20:56:39] "GET /openapi/swagger/css/swagger-ui.css HTTP/1.1" 200 - - call_trace=d:\Desenvolvimento\PUC\rescue-api\.venv\Lib\site-packages\werkzeug\_internal.py L97  
+[2025-04-10 20:56:39,119] INFO _log() L97   127.0.0.1 - - [10/Apr/2025 20:56:39] "GET /openapi/swagger/js/swagger-ui-standalone-preset.js HTTP/1.1" 200 - - call_trace=d:\Desenvolvimento\PUC\rescue-api\.venv\Lib\site-packages\werkzeug\_internal.py L97  
+[2025-04-10 20:56:39,127] INFO _log() L97   127.0.0.1 - - [10/Apr/2025 20:56:39] "GET /openapi/swagger/js/swagger-ui-bundle.js HTTP/1.1" 200 - - call_trace=d:\Desenvolvimento\PUC\rescue-api\.venv\Lib\site-packages\werkzeug\_internal.py L97  
+[2025-04-10 20:56:39,436] INFO _log() L97   127.0.0.1 - - [10/Apr/2025 20:56:39] "GET /openapi/openapi.json HTTP/1.1" 200 - - call_trace=d:\Desenvolvimento\PUC\rescue-api\.venv\Lib\site-packages\werkzeug\_internal.py L97  
+[2025-04-10 20:56:39,489] INFO _log() L97   127.0.0.1 - - [10/Apr/2025 20:56:39] "GET /openapi/swagger/images/swagger.svg HTTP/1.1" 200 - - call_trace=d:\Desenvolvimento\PUC\rescue-api\.venv\Lib\site-packages\werkzeug\_internal.py L97  
+[2025-04-10 21:20:51,596] INFO _log() L97    * Detected change in 'D:\\Desenvolvimento\\PUC\\rescue-api\\model\\vehicule.py', reloading - call_trace=d:\Desenvolvimento\PUC\rescue-api\.venv\Lib\site-packages\werkzeug\_internal.py L97  
+[2025-04-10 21:20:51,754] INFO _log() L97    * Restarting with stat - call_trace=d:\Desenvolvimento\PUC\rescue-api\.venv\Lib\site-packages\werkzeug\_internal.py L97  
+[2025-04-10 21:21:05,364] INFO _log() L97    * Restarting with stat - call_trace=d:\Desenvolvimento\PUC\rescue-api\.venv\Lib\site-packages\werkzeug\_internal.py L97  

@@ -83,34 +83,6 @@ def get_all_vehicules():
         print(vehicules)
         return get_vehicules(vehicules), 200  
 
-@app.delete('/vehicule', tags=[vehicule_tag],
-            responses={"200": VehiculeSchema, "404": ErrorSchema})
-def del_vehicule(query: VehiculeDeleteSchema):
-    """Delete a Vehicule from the database based on the id
-
-    Return the deleted vehicule.
-    """
-    vehicule_id = unquote(unquote(query.id))
-    print(vehicule_id)
-    logger.debug(f"Deleting the vehicule based on this id #{vehicule_id}")
-    # open data base session
-    session = Session()
-    # query to delete the vehicule
-    vehicule_to_update = session.query(Vehicule).filter(Vehicule.id == int(vehicule_id)).first()
-
-    if vehicule_to_update:
-        # update the object status
-        vehicule_to_update.status = False
-        # commit the changes
-        session.commit()
-        logger.debug(f"Vehicule status updated #{vehicule_to_update}")
-        return {"message": "Vehicule deleted", "id": get_vehicule(vehicule_to_update)}, 200
-    else:
-        # if vehicule not found
-        error_msg = "Vehicule not found"
-        logger.warning(f"Error while delete the vehicule #{error_msg}")
-        return {"message": error_msg}, 404
-    
 @app.post('/rescue-point', tags=[rescue_point_tag],
           responses={"200": RescuePointSchema, "409": ErrorSchema, "400": ErrorSchema})
 def add_recue_point(form: RescuePointSchema):
