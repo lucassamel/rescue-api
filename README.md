@@ -66,10 +66,6 @@ This API is designed to work in conjunction with the front-end available at: [lu
 
 Make sure the API is running before starting the front-end to ensure proper communication between components.
 
-## 📄 License
-
-This project is licensed under the [MIT License](LICENSE).
-
 ---
 
 For more information or to explore the code, visit the GitHub repository: [lucassamel/rescue-api](https://github.com/lucassamel/rescue-api).
